@@ -31,7 +31,7 @@ class Optimizer:
 
 		mean /= cnt
 
-		if mean < 1e-6	:		# this threshold is rather arbitrary, see http://cs231n.github.io/neural-networks-3/
+		if mean < 1e-4	:		# this threshold is rather arbitrary, see http://cs231n.github.io/neural-networks-3/
 			return 1
 		else:
 			return 0
