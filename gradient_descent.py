@@ -7,13 +7,27 @@ class GradientDescentOptimizer(Optimizer):
 		Optimizer.__init__(self, gamma)
 
 
-	def minimize(self, func, grad, w0, epsilon=1e-8):
-		points = 10*np.random.random_sample((10, *w0.shape)) - 5	# we pick 10 points in [-5,5]
+	def minimize(self, func, grad, b0, w0, epsilon=5e-8):
+		points = 10*np.random.random_sample((10, w0.shape[0]+1)) - 5	# we pick 10 points in [-5,5]
 		assert self.gradient_check(func, grad, points), "Gradient check has failed"
 
-		w = w0
-		while np.linalg.norm(grad(w)) > epsilon:
-			# NE MARCHE PAS, VOIR S'IL NE FAUDRAIT PAS SÉPARER LE BIAIS DES POIDS !!!
-			w = w - self.gamma*grad(w)
+		b, w = b0, w0
+		gamma = self.gamma
+		old = func(b0,w0)
+		diff = np.inf
+		while abs(diff) > epsilon:
+			step = gamma*grad(b,w)
+			b = b - step[0]
+			w = w - step[1:]
 
-		return w
+			diff = func(b,w) - old
+			if diff < 0:
+				gamma *= 1.05
+			else:
+				b = b + step[0]
+				w = w + step[1:]
+				gamma /=2
+
+			old = func(b,w)
+
+		return b, w
