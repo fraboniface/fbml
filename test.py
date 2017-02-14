@@ -3,7 +3,7 @@ import numpy as np
 from linear_model import LinearRegression
 from sklearn.linear_model import LinearRegression as sklr, Ridge, Lasso, ElasticNet
 
-from gradient_descent import VanillaGradientDescent, Momentum
+from gradient_descent import VanillaGradientDescent, Momentum, Nesterov
 
 from time import time
 
@@ -17,7 +17,7 @@ def test_linear_regression():
 
 	t0 = time()
 
-	reg = LinearRegression(regularization='l2', optimizer=Momentum).fit(X,y)
+	reg = LinearRegression(regularization='l2', optimizer=Nesterov).fit(X,y)
 	r2 = reg.r2(X,y)
 	mse = reg.mse(X,y)
 	print('my r2:', r2)
@@ -27,9 +27,9 @@ def test_linear_regression():
 	print("My implementation:", t1-t0)
 
 	#skreg = sklr().fit(X,y)
-	#skreg = Ridge().fit(X,y)
+	skreg = Ridge().fit(X,y)
 	#skreg = Lasso().fit(X,y)
-	skreg = ElasticNet().fit(X,y)
+	#skreg = ElasticNet().fit(X,y)
 	print('sklearn r2:', skreg.score(X,y))
 	predictions = skreg.predict(X)
 	mse =  np.mean((predictions-y)**2)
