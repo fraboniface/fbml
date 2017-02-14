@@ -5,3 +5,5 @@ in order to have a better understanding of the main machine learning
 algorithms.
 
 fbml stands for "François BONIFACE machine learning"
+
+- Linear regresssion: standard, Lasso, Ridge, Elastic-Net
