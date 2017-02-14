@@ -28,20 +28,20 @@ class LinearRegression(LinearModel):
 
 	def __init__(self, regularization=None, C=1.0, alpha=1.0, optimizer=GradientDescentOptimizer):
 		"""Linear regression model. No regularization, l1 (Lasso), l2(Ridge) and elastic-net are implemented.
-		C parameter is used for l2 regularization and alpha is used for l1 regularization."""
+		C parameter is used for l2 regularization and alpha is used for l1 regularization, be these mixed or not."""
 		LinearModel.__init__(self, regularization, C, alpha, optimizer)
 		if self.regularization is not None:
 			self.pred = lambda X,n,b,w: np.dot(X,w) + b*np.ones(n)
 
-		# CHANGER LES pred(b,w) PAR DES pred(X,n,b,w)
+			mse_loss = lambda X,y,n,b,w: np.dot(y-self.pred(X,n,b,w), y-self.pred(X,n,b,w))/(2*n)
+			mse_grad_b = lambda X,y,n,b,w: - np.sum(y-self.pred(X,n,b,w))/n
+			mse_grad_w = lambda X,y,n,b,w: - np.dot(X.T, y-self.pred(X,n,b,w))/n
 
-		mse_loss = lambda X,y,n,b,w: np.dot(y-self.pred(b,w), y-self.pred(b,w))/(2*n)
-		mse_grad_b = lambda X,y,n,b,w: - np.sum(y-self.pred(b,w))/n
-		mse_grad_w = lambda X,y,n,b,w: - np.dot(X.T, y-self.pred(b,w))/n
-		l2_loss = lambda w: self.C*np.dot(w.T, w)/2
-		l2_grad = lambda w: self.C*w
-		l1_loss = lambda w: self.alpha*np.linalg.norm(w, ord=1)
-		l1_grad = lambda w: self.alpha*np.sign(w)
+			l2_loss = lambda w: self.C*np.dot(w.T, w)/2
+			l2_grad = lambda w: self.C*w
+
+			l1_loss = lambda w: self.alpha*np.linalg.norm(w, ord=1)
+			l1_grad = lambda w: self.alpha*np.sign(w)
 
 		if self.regularization in ['l2', 'ridge']:
 			self.loss = lambda X,y,n,b,w: mse_loss(X,y,n,b,w) + l2_loss(w)
