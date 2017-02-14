@@ -50,7 +50,6 @@ class Momentum(Optimizer):
 		old = func(b0,w0)
 		diff = np.inf
 		while abs(diff) > epsilon:
-			print(func(b,w))
 			step = self.momentum*step + self.gamma*grad(b,w)
 			b = b - step[0]
 			w = w - step[1:]
