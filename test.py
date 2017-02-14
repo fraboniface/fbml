@@ -1,6 +1,6 @@
 import numpy as np
 
-from linear_regression import LinearRegression
+from linear_model import LinearRegression
 from sklearn.linear_model import LinearRegression as sklr, Ridge, Lasso, ElasticNet
 
 from gradient_descent import GradientDescentOptimizer
