@@ -3,7 +3,7 @@ import numpy as np
 from linear_model import LinearRegression
 from sklearn.linear_model import LinearRegression as sklr, Ridge, Lasso, ElasticNet
 
-from gradient_descent import GradientDescentOptimizer
+from gradient_descent import VanillaGradientDescent, Momentum
 
 from time import time
 
@@ -17,7 +17,7 @@ def test_linear_regression():
 
 	t0 = time()
 
-	reg = LinearRegression(regularization='elastic-net').fit(X,y)
+	reg = LinearRegression(regularization='l2', optimizer=Momentum).fit(X,y)
 	r2 = reg.r2(X,y)
 	mse = reg.mse(X,y)
 	print('my r2:', r2)
@@ -39,7 +39,7 @@ def test_linear_regression():
 
 
 def test_gradient_check():
-	opt = GradientDescentOptimizer()
+	opt = VanillaGradientDescent()
 	f = lambda b,w: np.dot(w.T, w) + b
 	df = lambda b,w: np.hstack((1, 2*w))
 	points = 10*np.random.random_sample((10, 10)) - 5

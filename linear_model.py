@@ -1,9 +1,9 @@
 import numpy as np
-from gradient_descent import GradientDescentOptimizer
+from gradient_descent import VanillaGradientDescent
 
 class LinearModel:
 
-	def __init__(self, regularization=None, C=1.0, alpha=1.0, optimizer=GradientDescentOptimizer):
+	def __init__(self, regularization=None, C=1.0, alpha=1.0, optimizer=VanillaGradientDescent):
 		assert regularization in [None, 'l1', 'lasso', 'l2', 'ridge', 'elastic-net'], "regularization must be None (default), 'l1', 'lasso', 'l2', 'ridge' or 'elastic-net'"
 		self.C = C
 		self.alpha = alpha
@@ -26,7 +26,7 @@ class LinearModel:
 
 class LinearRegression(LinearModel):
 
-	def __init__(self, regularization=None, C=1.0, alpha=1.0, optimizer=GradientDescentOptimizer):
+	def __init__(self, regularization=None, C=1.0, alpha=1.0, optimizer=VanillaGradientDescent):
 		"""Linear regression model. No regularization, l1 (Lasso), l2(Ridge) and elastic-net are implemented.
 		C parameter is used for l2 regularization and alpha is used for l1 regularization, be these mixed or not."""
 		LinearModel.__init__(self, regularization, C, alpha, optimizer)
