@@ -1,9 +1,10 @@
 import numpy as np
+import pandas as pd
 
-from linear_model import LinearRegression
-from sklearn.linear_model import LinearRegression as sklr, Ridge, Lasso, ElasticNet
+from linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression as sklr, Ridge, Lasso, ElasticNet, LogisticRegression as sklr
 
-from gradient_descent import VanillaGradientDescent, Momentum, Nesterov
+from optimization import VanillaGradientDescent, Momentum, Nesterov, AdaptiveGradientDescent
 
 from time import time
 
@@ -45,5 +46,25 @@ def test_gradient_check():
 	points = 10*np.random.random_sample((10, 10)) - 5
 	return opt.gradient_check(f, df, points)
 
+
+def test_logistic_regression():
+	columns = ['feature'+str(i+1) for i in range(34)]
+	columns.append('target')
+	df = pd.read_csv('binarydata.csv', header=None, names=columns)
+	df.target = (df.target == 'g').astype(np.int)
+	X = df.drop(['target'], axis=1).as_matrix()
+	y = df.target.as_matrix()
+	#y = 2*y - 1
+
+	t0 = time()
+	clf  = LogisticRegression(C=100.0, optimizer=Nesterov, tol=1e-4).fit(X,y)
+	print('my score', clf.accuracy(X,y))
+	t1 = time()
+	print("My implementation:", t1-t0)
+
+	skclf  = sklr(C=100.0).fit(X,y)
+	print('sklearn score', skclf.score(X,y))
+	print("sklearn implementation:", time()-t1)
+
 if __name__ == '__main__':
-	test_linear_regression()
+	test_logistic_regression()
