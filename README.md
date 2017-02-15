@@ -7,3 +7,4 @@ algorithms.
 fbml stands for "François BONIFACE machine learning"
 
 - Linear regresssion: standard, Lasso, Ridge, Elastic-Net
+- Logistic regression with l1 or l2 penalty
