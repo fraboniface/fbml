@@ -67,4 +67,4 @@ def test_logistic_regression():
 	print("sklearn implementation:", time()-t1)
 
 if __name__ == '__main__':
-	test_logistic_regression()
+	test_linear_regression()

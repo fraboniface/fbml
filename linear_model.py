@@ -127,12 +127,12 @@ class LogisticRegression(LinearModel):
 
 	def fit(self, X, y):
 		self.unique = set(y)
-		scalar_pred = lambda b,w: np.dot(X,w) + b
+		confidence = lambda b,w: np.dot(X,w) + b
 
 		if self.unique == set([-1,1]):
-			loss = lambda b,w: self.C*np.log(1+np.exp(-y*scalar_pred(b,w))).sum() + self.reg_loss(w)
+			loss = lambda b,w: self.C*np.log(1+np.exp(-y*confidence(b,w))).sum() + self.reg_loss(w)
 
-			v = lambda b,w: y / (1+np.exp(y*scalar_pred(b,w)))
+			v = lambda b,w: y / (1+np.exp(y*confidence(b,w)))
 
 			grad = lambda b,w: np.hstack((
 				-self.C*v(b,w).sum(),
@@ -140,9 +140,9 @@ class LogisticRegression(LinearModel):
 				))
 
 		elif self.unique == set([0,1]):	# we could simply replace y by 2*y-1 to use the former formulas, but as this library has an educationnal purpose, I prefered implementing both cases
-			loss = lambda b,w: self.C*np.sum(y*np.log(1+np.exp(-scalar_pred(b,w))) + (1-y)*np.log(1+np.exp(scalar_pred(b,w)))) + self.reg_loss(w)
+			loss = lambda b,w: self.C*np.sum(y*np.log(1+np.exp(-confidence(b,w))) + (1-y)*np.log(1+np.exp(confidence(b,w)))) + self.reg_loss(w)
 
-			v = lambda b,w: 1/(1+np.exp(-scalar_pred(b,w))) - y
+			v = lambda b,w: 1/(1+np.exp(-confidence(b,w))) - y
 
 			grad = lambda b,w: np.hstack((
 				self.C*v(b,w).sum(),
