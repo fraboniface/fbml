@@ -17,7 +17,8 @@ class SVM:
 			self.kernel = lambda gamma,u,v: (gamma*np.dot(u,v) + coef0)**degree
 
 		elif kernel == 'rbf':
-			assert gamma > 0 or gamma=='auto', "gamma must be greater than 0 for rbf kernel"
+			if gamma < 0 and gamma != 'auto':
+				raise ValueError("gamma must be 'auto' or greater than 0 for rbf kernel")
 			self.gamma = gamma
 			self.kernel = lambda gamma,u,v: np.exp(-gamma*(u-v)**2)
 
@@ -30,8 +31,9 @@ class SVM:
 
 
 	def fit(self, X, y):
-		if kernel != 'linear' and self.gamma == 'auto':
-			self.gamma = 1/X.shape[1]
+		if kernel != 'linear':
+			if self.gamma == 'auto':
+				self.gamma = 1/X.shape[1]
 			self.kernel = lambda u,v: self.kernel(self.gamma,u,v)
 
 		n = X.shape[0]
