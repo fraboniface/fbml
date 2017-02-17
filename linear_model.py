@@ -1,5 +1,5 @@
 import numpy as np
-from optimization import AdaptiveGradientDescent
+from optimization import Optimizer, AdaptiveGradientDescent
 
 class LinearModel:
 
@@ -9,7 +9,12 @@ class LinearModel:
 
 	def fit(self, X, y):
 		"""Fits the model to the data according to the parameters"""
-		pass
+		if not (isinstance(X, np.ndarray) and isinstance(y, np.ndarray)):
+			raise TypeError("arguments must be numpy arrays.")
+		elif y.ndim != 1:
+			raise ValueError("dimension of y must be 1. This model can only predict one value per datapoint.")
+		elif X.shape[0] != y.shape[0]:
+			raise ValueError("X and y must have same first dimension.")
 
 	def predict(self, X):
 		"""Predicts the target values according to the fitted weights. The "fit" method must have been called beforehand."""
@@ -26,7 +31,8 @@ class LinearRegression(LinearModel):
 		alpha parameter is used for l1 and l2 regularization, rho is the ratio of l1 regularization for elastic-net"""
 
 	def __init__(self, regularization=None, alpha=1.0, rho = 0.5, optimizer=AdaptiveGradientDescent, tol=1e-4):
-		assert regularization in [None, 'l1', 'lasso', 'l2', 'ridge', 'elastic-net'], "regularization must be None (default), 'l1', 'lasso', 'l2', 'ridge' or 'elastic-net'"
+		if regularization not in [None, 'l1', 'lasso', 'l2', 'ridge', 'elastic-net']:
+			raise ValueError("regularization must be None (default), 'l1', 'lasso', 'l2', 'ridge' or 'elastic-net'")
 		super().__init__(regularization, optimizer, tol)
 		if self.regularization is not None:
 			self.alpha = alpha
@@ -64,6 +70,7 @@ class LinearRegression(LinearModel):
 				))
 
 	def fit(self, X, y):
+		super().fit(X,y)
 		if self.regularization is None:
 			X = np.hstack((np.ones((X.shape[0],1)), X)) # takes the bias into account
 			#self.w = np.dot(np.linalg.inv(np.dot(X.T,X)), np.dot(X.T,y))
@@ -126,6 +133,7 @@ class LogisticRegression(LinearModel):
 
 
 	def fit(self, X, y):
+		super().fit(X,y)
 		self.unique = set(y)
 		confidence = lambda b,w: np.dot(X,w) + b
 

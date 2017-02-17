@@ -1,7 +1,7 @@
 import numpy as np
 
 class Optimizer:
-	"""Optimizer base class. It works but much slower and not as accuate as scikit-learn implementation."""
+	"""Optimizer base class. Much slower than scikit-learn implementation."""
 
 	def __init__(self, gamma, epsilon):
 		self.gamma = gamma
