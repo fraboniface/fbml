@@ -68,8 +68,8 @@ class VanillaGradientDescent(Optimizer):
 
 
 class AdaptiveGradientDescent(Optimizer):
-	"""Vanilla gradient descent with adaptive learning rate not to be unbearably inefficient.
-		If the loss is decreasing, increases the learning rate by 5%, if it's increasing, halves it and go back to previous point."""
+	"""Vanilla gradient descent with adaptive learning rate.
+		If the loss is decreasing, increase the learning rate by 5%, if it's increasing, halve it and go back to previous point."""
 
 	def __init__(self, gamma=1e-3, epsilon=1e-4):
 		super().__init__(gamma, epsilon)
