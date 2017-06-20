@@ -1,5 +1,6 @@
 import numpy as np
-from optimization import Optimizer, AdaptiveGradientDescent
+
+from fbml.optimization.gradient_descent import AdaptiveGradientDescent
 
 class LinearModel:
 
